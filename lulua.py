@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 import os
 import openai
 import pyttsx3
+import re
+import random
 
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -46,23 +48,63 @@ while True:
 
     if pergunta == "Quem te criou?":
         # Gera uma mensagem motivacional usando a API do OpenAI
-        mensagem_motivacional = obter_resposta("Quem me criou foi o Luiz Miguel, utilizando a inteligência artificial do chat gpt 3")
+        criacao = obter_resposta("Quem me criou foi o Luiz Miguel, utilizando a inteligência artificial do chat gpt 3 'em português'")
 
         # Converte a mensagem em fala e reproduz o áudio
-        engine.say(mensagem_motivacional)
+        print(criacao)
+        # Converte a mensagem em fala e reproduz o áudio
+        engine.say(criacao)
         engine.runAndWait()
 
-    if pergunta == "motivação":
+    elif pergunta == "motiva":
         # Gera uma mensagem motivacional usando a API do OpenAI
-        mensagem_motivacional = obter_resposta("gerar mensagem motivacional")
+        mensagem_motivacional = obter_resposta("Gerar mensagem motivacional 'em português'")
 
+        # Converte a mensagem em fala e reproduz o áudio
+        print(mensagem_motivacional)
         # Converte a mensagem em fala e reproduz o áudio
         engine.say(mensagem_motivacional)
         engine.runAndWait()
+        # Verifica se a pergunta começa com "dado"
+    elif pergunta.startswith("dado"):
+        # Extrai o tipo de dado e o número correspondente
+        resultado = re.search(r"dado\s+(\w+)\s*(\d+)?", pergunta)
+        if resultado:
+            tipo_de_dado = resultado.group(1)
+            numero_do_dado = int(resultado.group(2)) if resultado.group(2) else 1
+
+            # Gera um número aleatório correspondente ao dado
+            resultado_do_dado = random.randint(1, int(tipo_de_dado[1:]))
+            resultado_final = f"O resultado do {tipo_de_dado} foi {resultado_do_dado}"
+            if numero_do_dado > 1:
+                resultado_final += f" x {numero_do_dado} = {resultado_do_dado * numero_do_dado}"
+
+            # Converte a mensagem em fala e reproduz o áudio
+            print(resultado_final)
+            # Converte a resposta em fala e reproduz o áudio
+            engine.say(resultado_final)
+            engine.runAndWait()
+
+    elif pergunta == "ler arquivo":
+        # Lê o conteúdo do arquivo
+        with open("arquivo.txt", "r") as arquivo:
+            conteudo = arquivo.read()
+
+        # Obtém a resposta do GPT-3 a partir do conteúdo do arquivo
+        resposta = obter_resposta(conteudo)
+
+        # Converte a mensagem em fala e reproduz o áudio
+        print(resposta)
+        # Converte a resposta em fala e reproduz o áudio
+        engine.say(resposta)
+        engine.runAndWait()
+
     else:
         # Envia a pergunta para o GPT-3 e obtém a resposta
         resposta = obter_resposta(pergunta)
 
+        # Converte a mensagem em fala e reproduz o áudio
+        print(resposta)
         # Converte a resposta em fala e reproduz o áudio
         engine.say(resposta)
         engine.runAndWait()
