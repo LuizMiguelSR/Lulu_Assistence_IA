@@ -105,30 +105,27 @@ while True:
             engine.runAndWait()
 
     elif pergunta.startswith("lulu git push"):
-        # Executa o comando git push
-        proc = subprocess.Popen(pergunta.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = proc.communicate()
+            # Obtém o nome da branch
+            branch = input("Qual é o nome da branch que você quer enviar para o repositório remoto? ")
 
-        # Passa a saída do comando para o ChatGPT
-        resposta = obter_resposta(out.decode("utf-8"))
+            # Executa o comando git push
+            proc = subprocess.Popen(["git", "push", "origin", branch], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = proc.communicate()
 
-        # Converte a resposta em fala e reproduz o áudio
-        engine.say(resposta)
-        engine.runAndWait()
+            # Passa a saída do comando para o ChatGPT
+            resposta = obter_resposta(out.decode("utf-8"))
 
-        # Passa os erros do comando para o ChatGPT
-        resposta = obter_resposta(err.decode("utf-8"))
-
-        # Converte a mensagem em fala e reproduz o áudio
-        if not resposta:
-            resposta = "Ocorreu um erro ao realizar o push"
+            # Converte a mensagem em fala e reproduz o áudio
             print(resposta)
-            engine.say(resposta)
+            engine.say('Push realizado com sucesso.')
             engine.runAndWait()
-        else:
-            print(resposta)
-            engine.say(resposta)
-            engine.run
+
+            # Passa os erros do comando para o ChatGPT
+            if err:
+                resposta = obter_resposta(err.decode("utf-8"))
+                print(resposta)
+                engine.say('Erro ao realizar push. Verifique se há algo para ser enviado para o repositório remoto.')
+                engine.runAndWait()
 
     elif pergunta == "Quem te criou?":
         # Gera uma mensagem motivacional usando a API do OpenAI
