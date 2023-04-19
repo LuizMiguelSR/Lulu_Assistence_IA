@@ -4,6 +4,7 @@ import openai
 import pyttsx3
 import re
 import random
+import subprocess
 
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -46,7 +47,90 @@ while True:
     if pergunta.lower() == "sair":
         break
 
-    if pergunta == "Quem te criou?":
+    # Comandos do git
+    if pergunta.startswith("lulu git add"):
+        # Pega o diretório atual de trabalho
+        diretorio_atual = os.getcwd()
+
+        # Concatena o diretório atual com o argumento "."
+        caminho = os.path.join(diretorio_atual, ".")
+
+        # Executa o comando git add
+        proc = subprocess.Popen(["git", "add", caminho], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+
+        # Passa a saída do comando para o ChatGPT
+        resposta = obter_resposta(out.decode("utf-8"))
+
+        # Converte a mensagem em fala e reproduz o áudio
+        print(resposta)
+        engine.say('Adicionado ao stage')
+        engine.runAndWait()
+
+        # Passa os erros do comando para o ChatGPT
+        resposta = obter_resposta('Responda em português o que vem a seguir, ' + err.decode("utf-8"))
+
+        # Converte a mensagem em fala e reproduz o áudio
+        if not resposta:
+            resposta = "Ocorreu um erro ao executar o comando"
+            print(resposta)
+            engine.say(resposta)
+            engine.runAndWait()
+        else:
+            print(resposta)
+            engine.say(resposta)
+            engine.runAndWait()
+
+    elif pergunta.startswith("lulu git commit"):
+        # Pega a mensagem de commit a partir do comando
+        mensagem_commit = pergunta.replace("lulu git commit ", "")
+
+        # Executa o comando git commit
+        proc = subprocess.Popen(["git", "commit", "-m", mensagem_commit], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+
+        # Passa a saída do comando para o ChatGPT
+        resposta = obter_resposta(out.decode("utf-8"))
+
+        # Converte a mensagem em fala e reproduz o áudio
+        print(resposta)
+        engine.say('Commit realizado com sucesso.')
+        engine.runAndWait()
+
+        # Passa os erros do comando para o ChatGPT
+        if err:
+            resposta = obter_resposta(err.decode("utf-8"))
+            print(resposta)
+            engine.say('Erro ao realizar commit. Verifique se há algo para ser commitado.')
+            engine.runAndWait()
+
+    elif pergunta.startswith("lulu git push"):
+        # Executa o comando git push
+        proc = subprocess.Popen(pergunta.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+
+        # Passa a saída do comando para o ChatGPT
+        resposta = obter_resposta(out.decode("utf-8"))
+
+        # Converte a resposta em fala e reproduz o áudio
+        engine.say(resposta)
+        engine.runAndWait()
+
+        # Passa os erros do comando para o ChatGPT
+        resposta = obter_resposta(err.decode("utf-8"))
+
+        # Converte a mensagem em fala e reproduz o áudio
+        if not resposta:
+            resposta = "Ocorreu um erro ao realizar o push"
+            print(resposta)
+            engine.say(resposta)
+            engine.runAndWait()
+        else:
+            print(resposta)
+            engine.say(resposta)
+            engine.run
+
+    elif pergunta == "Quem te criou?":
         # Gera uma mensagem motivacional usando a API do OpenAI
         criacao = obter_resposta("Quem me criou foi o Luiz Miguel, utilizando a inteligência artificial do chat gpt 3 'em português'")
 
@@ -66,6 +150,7 @@ while True:
         engine.say(mensagem_motivacional)
         engine.runAndWait()
         # Verifica se a pergunta começa com "dado"
+
     elif pergunta.startswith("dado"):
         # Extrai o tipo de dado e o número correspondente
         resultado = re.search(r"dado\s+(\w+)\s*(\d+)?", pergunta)

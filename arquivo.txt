@@ -1,5 +1,15 @@
-Roteiro
+Em português, comente este código python.
 
-O que é inteligência artificial?
+if pergunta == "ler arquivo":
+    # Lê o conteúdo do arquivo
+    with open("arquivo.txt", "r") as arquivo:
+        conteudo = arquivo.read()
 
-Principais vantagens da inteligência artificial?
+    # Obtém a resposta do GPT-3 a partir do conteúdo do arquivo
+    resposta = obter_resposta(conteudo)
+
+    # Converte a mensagem em fala e reproduz o áudio
+    print(resposta)
+    # Converte a resposta em fala e reproduz o áudio
+    engine.say(resposta)
+    engine.runAndWait()
