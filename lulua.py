@@ -68,7 +68,7 @@ while True:
         engine.runAndWait()
 
         # Passa os erros do comando para o ChatGPT
-        resposta = obter_resposta('Responda em português o que vem a seguir, ' + err.decode("utf-8"))
+        resposta = obter_resposta(err.decode("utf-8") + ' responda em português.')
 
         # Converte a mensagem em fala e reproduz o áudio
         if not resposta:
@@ -99,9 +99,9 @@ while True:
 
         # Passa os erros do comando para o ChatGPT
         if err:
-            resposta = obter_resposta(err.decode("utf-8"))
+            resposta = obter_resposta(err.decode("utf-8") + ' responda em português.')
             print(resposta)
-            engine.say('Erro ao realizar commit. Verifique se há algo para ser commitado.')
+            engine.say(resposta)
             engine.runAndWait()
 
     elif pergunta.startswith("lulu git push"):
@@ -122,12 +122,12 @@ while True:
 
             # Passa os erros do comando para o ChatGPT
             if err:
-                resposta = obter_resposta(err.decode("utf-8"))
+                resposta = obter_resposta(err.decode("utf-8") + ' responda em português.')
                 print(resposta)
-                engine.say('Erro ao realizar push. Verifique se há algo para ser enviado para o repositório remoto.')
+                engine.say(resposta)
                 engine.runAndWait()
 
-    elif pergunta == "Quem te criou?":
+    elif pergunta == "Quem te criou Lulu?":
         # Gera uma mensagem motivacional usando a API do OpenAI
         criacao = obter_resposta("Quem me criou foi o Luiz Miguel, utilizando a inteligência artificial do chat gpt 3 'em português'")
 
@@ -137,7 +137,7 @@ while True:
         engine.say(criacao)
         engine.runAndWait()
 
-    elif pergunta == "motiva":
+    elif pergunta == "Lulu me motive":
         # Gera uma mensagem motivacional usando a API do OpenAI
         mensagem_motivacional = obter_resposta("Gerar mensagem motivacional 'em português'")
 
@@ -148,7 +148,7 @@ while True:
         engine.runAndWait()
         # Verifica se a pergunta começa com "dado"
 
-    elif pergunta.startswith("dado"):
+    elif pergunta.startswith("Lulu gire dado"):
         # Extrai o tipo de dado e o número correspondente
         resultado = re.search(r"dado\s+(\w+)\s*(\d+)?", pergunta)
         if resultado:
@@ -167,7 +167,7 @@ while True:
             engine.say(resultado_final)
             engine.runAndWait()
 
-    elif pergunta == "ler arquivo":
+    elif pergunta == "Lulu leia codigo":
         # Lê o conteúdo do arquivo
         with open("arquivo.txt", "r") as arquivo:
             conteudo = arquivo.read()
