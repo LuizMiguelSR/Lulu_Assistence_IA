@@ -1,4 +1,4 @@
-Em português, comente este código python.
+Há algo de errado neste código python?
 
 if pergunta == "ler arquivo":
     # Lê o conteúdo do arquivo
