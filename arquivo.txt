@@ -1,4 +1,4 @@
-Há algo de errado neste código python?
+Há algo de errado neste código abaixo escrito em python?
 
 if pergunta == "ler arquivo":
     # Lê o conteúdo do arquivo
@@ -11,5 +11,5 @@ if pergunta == "ler arquivo":
     # Converte a mensagem em fala e reproduz o áudio
     print(resposta)
     # Converte a resposta em fala e reproduz o áudio
-    engine.say(resposta)
+    engine.say(respostas)
     engine.runAndWait()
